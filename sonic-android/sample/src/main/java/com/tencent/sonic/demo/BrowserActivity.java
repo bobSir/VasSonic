@@ -48,12 +48,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  A demo browser activity
- *  In this demo there are three modes,
- *  sonic mode: sonic mode means webview loads html by sonic,
- *  offline mode: offline mode means webview loads html from local offline packages,
- *  default mode: default mode means webview loads html in the normal way.
- *
+ * A demo browser activity
+ * In this demo there are three modes,
+ * sonic mode: sonic mode means webview loads html by sonic,
+ * offline mode: offline mode means webview loads html from local offline packages,
+ * default mode: default mode means webview loads html in the normal way.
  */
 
 public class BrowserActivity extends Activity {
@@ -69,7 +68,7 @@ public class BrowserActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        String url = intent.getStringExtra(PARAM_URL);
+        String url = "https://acttest.1234567.com.cn/topic/2020/fund-quick-review/pages/home/index?debug=true";
         int mode = intent.getIntExtra(PARAM_MODE, -1);
         if (TextUtils.isEmpty(url) || -1 == mode) {
             finish();

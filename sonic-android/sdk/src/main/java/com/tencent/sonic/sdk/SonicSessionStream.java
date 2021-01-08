@@ -24,11 +24,9 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
 /**
- *
  * A <code>SonicSessionStream</code> obtains input bytes
  * from a <code>memStream</code> and a <code>netStream</code>.
  * <code>memStream</code>is read data from network, <code>netStream</code>is unread data from network.
- *
  */
 public class SonicSessionStream extends InputStream {
 
@@ -107,7 +105,6 @@ public class SonicSessionStream extends InputStream {
     /**
      * Closes this input stream and releases any system resources
      * associated with the stream and invoke the callback's onClose method
-     *
      */
     @Override
     public void close() throws IOException {
@@ -147,7 +144,7 @@ public class SonicSessionStream extends InputStream {
         if (error != null) {
             SonicUtils.log(TAG, Log.ERROR, "throw error:" + error.getMessage());
             if (error instanceof IOException) {
-                throw (IOException)error;
+                throw (IOException) error;
             } else { // Turn all exceptions to IO exceptions to prevent scenes that the kernel can not capture
                 throw new IOException(error);
             }
@@ -155,7 +152,6 @@ public class SonicSessionStream extends InputStream {
     }
 
     /**
-     *
      * <p>
      * Reads a single byte from this stream and returns it as an integer in the
      * range from 0 to 255. Returns -1 if the end of the stream has been
@@ -207,7 +203,6 @@ public class SonicSessionStream extends InputStream {
     }
 
     /**
-     *
      * Reads up to {@code byteCount} bytes from this stream and stores them in
      * the byte array {@code buffer} starting at {@code byteOffset}.
      * Returns the number of bytes actually read or -1 if the end of the stream
