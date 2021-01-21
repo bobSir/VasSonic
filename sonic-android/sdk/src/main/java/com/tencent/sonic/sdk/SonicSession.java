@@ -48,7 +48,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * data to kernel, separate html to template and data, build template
  * and data to html and so on. Each url involves one session at a time,
  * that session will be destroyed when the page is destroyed.
- *
  */
 
 public abstract class SonicSession implements Handler.Callback {
@@ -101,7 +100,6 @@ public abstract class SonicSession implements Handler.Callback {
      * <p>
      * This state means session has begun to request data from
      * the server and is processing the data.
-     *
      */
     public static final int STATE_RUNNING = 1;
 
@@ -111,7 +109,6 @@ public abstract class SonicSession implements Handler.Callback {
      * This state means session data is available when the page
      * initiates a resource interception. In other stats the
      * client(kernel) will wait.
-     *
      */
     public static final int STATE_READY = 2;
 
@@ -128,7 +125,6 @@ public abstract class SonicSession implements Handler.Callback {
      * This value means sonic server unavailable, the terminal
      * does not take sonic logic for the next period of time,the
      * value of time is defined in {@link SonicConfig#SONIC_UNAVAILABLE_TIME}
-     *
      */
     public static final String OFFLINE_MODE_HTTP = "http";
 
@@ -139,7 +135,6 @@ public abstract class SonicSession implements Handler.Callback {
      * page.For example, when sonic mode is data update, sonic will not
      * provide the difference data between local and server to page to refresh
      * the content.
-     *
      */
     public static final String OFFLINE_MODE_STORE = "store";
 
@@ -147,7 +142,6 @@ public abstract class SonicSession implements Handler.Callback {
      * The value of "cache-offline" in http(s) response headers.
      * <p>
      * This value means sonic will save the latest data and refresh page content.
-     *
      */
     public static final String OFFLINE_MODE_TRUE = "true";
 
@@ -156,7 +150,6 @@ public abstract class SonicSession implements Handler.Callback {
      * <p>
      * This value means sonic will refresh page content but not save date, sonic
      * will remove the local data also.
-     *
      */
     public static final String OFFLINE_MODE_FALSE = "false";
 
@@ -188,21 +181,19 @@ public abstract class SonicSession implements Handler.Callback {
     /**
      * Sonic original mode.
      * <p>
-     *  For example, when local data does not exist, the value is
-     *  <code>SONIC_RESULT_CODE_FIRST_LOAD</code>
-     *
+     * For example, when local data does not exist, the value is
+     * <code>SONIC_RESULT_CODE_FIRST_LOAD</code>
      */
     protected int srcResultCode = SONIC_RESULT_CODE_UNKNOWN;
 
     /**
      * Sonic final mode.
      * <p>
-     *  For example, when local data does not exist, the <code>srcResultCode</code>
-     *  value is <code>SONIC_RESULT_CODE_FIRST_LOAD</code>. If the server data is read
-     *  finished, sonic will provide the latest data to kernel when the kernel
-     *  initiates a resource interception.This effect is the same as loading local data,
-     *  so the sonic mode will be set as <code>SONIC_RESULT_CODE_HIT_CACHE</code>
-     *
+     * For example, when local data does not exist, the <code>srcResultCode</code>
+     * value is <code>SONIC_RESULT_CODE_FIRST_LOAD</code>. If the server data is read
+     * finished, sonic will provide the latest data to kernel when the kernel
+     * initiates a resource interception.This effect is the same as loading local data,
+     * so the sonic mode will be set as <code>SONIC_RESULT_CODE_HIT_CACHE</code>
      */
     protected int finalResultCode = SONIC_RESULT_CODE_UNKNOWN;
 
@@ -298,7 +289,6 @@ public abstract class SonicSession implements Handler.Callback {
      * Whether the local html is loaded, it is used only the template changes.
      */
     protected final AtomicBoolean wasOnPageFinishInvoked = new AtomicBoolean(false);
-
 
 
     /**
@@ -430,9 +420,9 @@ public abstract class SonicSession implements Handler.Callback {
 
     private void saveSonicCacheOnServerClose(SonicServer sonicServer) {
         // if the session has been destroyed or refresh, exit directly
-        if(isDestroyedOrWaitingForDestroy()) {
+        if (isDestroyedOrWaitingForDestroy()) {
             SonicUtils.log(TAG, Log.ERROR, "session(" + sId + ") doSaveSonicCache: save session files fail." +
-                    " Current session is destroy (" + isDestroyedOrWaitingForDestroy()  + ") or refresh ( " + (sonicServer != server) + ")");
+                    " Current session is destroy (" + isDestroyedOrWaitingForDestroy() + ") or refresh ( " + (sonicServer != server) + ")");
             return;
         }
 
@@ -473,7 +463,7 @@ public abstract class SonicSession implements Handler.Callback {
                     }
 
                     case FILE_THREAD_SAVE_CACHE_ON_SESSION_FINISHED: {
-                        final String htmlString = (String)msg.obj;
+                        final String htmlString = (String) msg.obj;
                         doSaveSonicCache(server, htmlString);
                         return true;
                     }
@@ -653,8 +643,8 @@ public abstract class SonicSession implements Handler.Callback {
     /**
      * Initiate a network request to obtain server data.
      *
-     * @param hasCache Indicates local sonic cache is exist or not.
-     * @param sessionData  SessionData holds eTag templateTag
+     * @param hasCache    Indicates local sonic cache is exist or not.
+     * @param sessionData SessionData holds eTag templateTag
      */
     protected void handleFlow_Connection(boolean hasCache, SonicDataHelper.SessionData sessionData) {
         // create connection for current session
@@ -662,7 +652,7 @@ public abstract class SonicSession implements Handler.Callback {
 
         if (config.SUPPORT_CACHE_CONTROL && statistics.connectionFlowStartTime < sessionData.expiredTime) {
             if (SonicUtils.shouldLog(Log.DEBUG)) {
-                SonicUtils.log(TAG, Log.DEBUG,  "session(" + sId + ") won't send any request in " + (sessionData.expiredTime - statistics.connectionFlowStartTime) + ".ms");
+                SonicUtils.log(TAG, Log.DEBUG, "session(" + sId + ") won't send any request in " + (sessionData.expiredTime - statistics.connectionFlowStartTime) + ".ms");
             }
             for (WeakReference<SonicSessionCallback> ref : sessionCallbackList) {
                 SonicSessionCallback callback = ref.get();
@@ -811,12 +801,14 @@ public abstract class SonicSession implements Handler.Callback {
 
     /**
      * Handle data update {@link SonicSession#SONIC_RESULT_CODE_DATA_UPDATE} logic.
+     *
      * @param serverRsp Server response data.
      */
     protected abstract void handleFlow_DataUpdate(String serverRsp);
 
     /**
      * Handle template update {@link SonicSession#SONIC_RESULT_CODE_TEMPLATE_CHANGE} logic.
+     *
      * @param newHtml new Html string from web-server
      */
     protected abstract void handleFlow_TemplateChange(String newHtml);
@@ -856,7 +848,6 @@ public abstract class SonicSession implements Handler.Callback {
             }
         }, 0);
     }
-
 
 
     void setIsPreload(String url) {
@@ -960,15 +951,15 @@ public abstract class SonicSession implements Handler.Callback {
      * close.
      *
      * <p>
-     *  If the html is read complete, sonic will separate the html to template and data, and save these
-     *  data.
+     * If the html is read complete, sonic will separate the html to template and data, and save these
+     * data.
      *
-     * @param sonicServer The actual server connection of current SonicSession.
+     * @param sonicServer  The actual server connection of current SonicSession.
      * @param readComplete Whether the html is read complete.
      */
     public void onServerClosed(final SonicServer sonicServer, final boolean readComplete) {
         // if the session has been destroyed, exit directly
-        if(isDestroyedOrWaitingForDestroy()) {
+        if (isDestroyedOrWaitingForDestroy()) {
             return;
         }
 
@@ -994,7 +985,7 @@ public abstract class SonicSession implements Handler.Callback {
             }
             SonicUtils.log(TAG, Log.INFO, "session(" + sId + ") onClose:offline->" + cacheOffline + " , so do not need cache to file.");
         } else {
-            SonicUtils.log(TAG, Log.ERROR, "session(" + sId + ") onClose error:readComplete = false!" );
+            SonicUtils.log(TAG, Log.ERROR, "session(" + sId + ") onClose error:readComplete = false!");
         }
 
         // Current session can be destroyed if it is waiting for destroy.
@@ -1018,7 +1009,7 @@ public abstract class SonicSession implements Handler.Callback {
 
     protected void doSaveSonicCache(SonicServer sonicServer, String htmlString) {
         // if the session has been destroyed, exit directly
-        if(isDestroyedOrWaitingForDestroy() || server == null) {
+        if (isDestroyedOrWaitingForDestroy() || server == null) {
             SonicUtils.log(TAG, Log.ERROR, "session(" + sId + ") doSaveSonicCache: save session files fail. Current session is destroy!");
             return;
         }
@@ -1166,7 +1157,7 @@ public abstract class SonicSession implements Handler.Callback {
             delta = delta >= 2000 ? 0L : delta;
         }
 
-        if (delta > 0L ) {
+        if (delta > 0L) {
             delta = 2000L - delta;
             SonicEngine.getInstance().getRuntime().postTaskToMainThread(new Runnable() {
                 @Override
@@ -1243,7 +1234,7 @@ public abstract class SonicSession implements Handler.Callback {
     /**
      * Set cookies to webview from headers
      *
-     * @param headers headers from server response
+     * @param headers            headers from server response
      * @param executeInNewThread whether execute in new thread or not
      * @return Set cookie success or not
      */
@@ -1279,11 +1270,10 @@ public abstract class SonicSession implements Handler.Callback {
     }
 
 
-
     /**
      * Client will call this method to obtain the update data when the page shows the content.
      *
-     * @param diffDataCallback  Sonic provides the latest data to the page through this callback
+     * @param diffDataCallback Sonic provides the latest data to the page through this callback
      * @return The result
      */
     public boolean onWebReady(SonicDiffDataCallback diffDataCallback) {
@@ -1339,6 +1329,7 @@ public abstract class SonicSession implements Handler.Callback {
 
     /**
      * Get the charset from the latest response http header.
+     *
      * @return The charset.
      */
     protected String getCharsetFromHeaders() {
@@ -1351,7 +1342,7 @@ public abstract class SonicSession implements Handler.Callback {
         String key = SonicSessionConnection.HTTP_HEAD_FIELD_CONTENT_TYPE.toLowerCase();
         if (headers != null && headers.containsKey(key)) {
             String headerValue = headers.get(key);
-            if (!TextUtils.isEmpty(headerValue) ) {
+            if (!TextUtils.isEmpty(headerValue)) {
                 charset = SonicUtils.getCharset(headerValue);
             }
         }

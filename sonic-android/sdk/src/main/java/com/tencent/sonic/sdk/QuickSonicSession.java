@@ -29,7 +29,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- *
  * A subclass of SonicSession.
  * QuickSonicSession mainly uses {@link SonicSessionClient#loadDataWithBaseUrlAndHeader(String, String, String, String, String, HashMap)}
  * to load data. Sometime, it will use {@link SonicSessionClient#loadUrl(String, Bundle)} instead. By using
@@ -37,10 +36,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * quickly load web pages without the network affecting.
  *
  * <p>
- *  ATTENTION:
- *  Standard WebView don't have head information (such as csp) when it calls
- *  {@link SonicSessionClient#loadDataWithBaseUrlAndHeader(String, String, String, String, String, HashMap)} method.
- *  So this session mode may cause a security risk. However, you can put the csp contents into the html to avoid this risk caused by the lack of csp.
+ * ATTENTION:
+ * Standard WebView don't have head information (such as csp) when it calls
+ * {@link SonicSessionClient#loadDataWithBaseUrlAndHeader(String, String, String, String, String, HashMap)} method.
+ * So this session mode may cause a security risk. However, you can put the csp contents into the html to avoid this risk caused by the lack of csp.
  *
  * <p>
  * See also {@link StandardSonicSession}
@@ -264,7 +263,7 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
      * Handle first load message.If the type of this message is <code>FIRST_LOAD_NO_DATA</code> and client did not
      * initiated request for load url,the quickSonicSession will do nothing but assign a value to sonic by invoke
      * setResult method.
-     *
+     * <p>
      * If the type of this message is <code>FIRST_LOAD_WITH_DATA</code> and client did not initiated request for load url,
      * client will load the html content that comes from server . In this case, the value of <code>finalResultCode</code>
      * will be set as <code>SONIC_RESULT_CODE_HIT_CACHE</code>.If client has a request for load url before,the value of
@@ -302,7 +301,7 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
      * Handle data update message. If client had loaded local data before, sonic will store the difference data between
      * server and local data to <code>pendingDiffData</code>. The value of <code>finalResultCode</code> will be set as
      * <code>SONIC_RESULT_CODE_DATA_UPDATE</code>.
-     *
+     * <p>
      * If client had not loaded local data before, client will load new html content which is from the combination of local
      * template content and server data.The value of <code>finalResultCode</code> will be set as <code>SONIC_RESULT_CODE_HIT_CACHE</code>.
      *
@@ -339,7 +338,7 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
      * Handle template change message.If client had loaded local data before and the page need refresh,
      * client will load data or loadUrl according to whether the message has latest data. And the
      * <code>finalResultCode</code> will be set as <code>SONIC_RESULT_CODE_TEMPLATE_CHANGE</code>.
-     *
+     * <p>
      * If client had not loaded local data before, client will load the latest html content which comes
      * from server and the <code>finalResultCode</code> will be set as <code>SONIC_RESULT_CODE_HIT_CACHE</code>.
      *
@@ -490,7 +489,7 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
         return null;
     }
 
-    protected void handleFlow_HttpError(int responseCode){
+    protected void handleFlow_HttpError(int responseCode) {
         if (config.RELOAD_IN_BAD_NETWORK) {
             mainHandler.removeMessages(CLIENT_CORE_MSG_PRE_LOAD);
             Message msg = mainHandler.obtainMessage(CLIENT_CORE_MSG_CONNECTION_ERROR);
@@ -505,27 +504,26 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
         }
     }
 
-    protected void handleFlow_ServiceUnavailable(){
+    protected void handleFlow_ServiceUnavailable() {
         mainHandler.removeMessages(CLIENT_CORE_MSG_PRE_LOAD);
         Message msg = mainHandler.obtainMessage(CLIENT_CORE_MSG_SERVICE_UNAVAILABLE);
         mainHandler.sendMessage(msg);
 
     }
-	
+
     /**
-     *
      * In this case sonic will always read the new data from the server until the local page finish.
      * If the server data is read finished, sonic will send a <code>CLIENT_CORE_MSG_TEMPLATE_CHANGE</code>
      * message.
-     *
+     * <p>
      * If the server data is not read finished sonic will split the read and unread data into a
      * bridgedStream{@link SonicSessionStream}. When the client initiates a resource interception,
      * sonic will provide the bridgedStream to the kernel.
      *
      * <p>
      * If need save and separate data, sonic will save the server data and separate the server data to template and data.
-     *  @param newHtml html content from server
      *
+     * @param newHtml html content from server
      */
     protected void handleFlow_TemplateChange(String newHtml) {
         try {
@@ -592,13 +590,12 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
     }
 
     /**
-     *
      * In this case sonic will always read the new data from the server until the client
      * initiates a resource interception.
-     *
+     * <p>
      * If the server data is read finished, sonic will send <code>CLIENT_CORE_MSG_FIRST_LOAD</code>
      * message with the new html content from server.
-     *
+     * <p>
      * If the server data is not read finished sonic will split the read and unread data into
      * a bridgedStream{@link SonicSessionStream}.When client initiates a resource interception,
      * sonic will provide the bridgedStream to the kernel.
@@ -606,7 +603,6 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
      * <p>
      * If need save and separate data, sonic will save the server data and separate the server data
      * to template and data.
-     *
      */
     protected void handleFlow_FirstLoad() {
         pendingWebResourceStream = server.getResponseStream(wasInterceptInvoked);
@@ -645,7 +641,6 @@ public class QuickSonicSession extends SonicSession implements Handler.Callback 
     }
 
     /**
-     *
      * In this case sonic obtains the difference data between the server and the local
      * data first,then sonic will build the template and server data into html,
      * then send a <code>CLIENT_CORE_MSG_DATA_UPDATE</code> message.
