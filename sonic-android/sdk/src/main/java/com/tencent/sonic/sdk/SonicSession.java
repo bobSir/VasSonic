@@ -537,36 +537,37 @@ public abstract class SonicSession implements Handler.Callback {
             handleFlow_LoadLocalCache(cacheHtml); // local cache if exist before connection
         }
 
-        boolean hasHtmlCache = !TextUtils.isEmpty(cacheHtml) || !firstRequest;
+//        boolean hasHtmlCache = !TextUtils.isEmpty(cacheHtml) || !firstRequest;
+//        final SonicRuntime runtime = SonicEngine.getInstance().getRuntime();
+//        if (!runtime.isNetworkValid()) {
+//            //Whether the network is available
+//            if (hasHtmlCache && !TextUtils.isEmpty(config.USE_SONIC_CACHE_IN_BAD_NETWORK_TOAST)) {
+//                runtime.postTaskToMainThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (clientIsReady.get() && !isDestroyedOrWaitingForDestroy()) {
+//                            runtime.showToast(config.USE_SONIC_CACHE_IN_BAD_NETWORK_TOAST, Toast.LENGTH_LONG);
+//                        }
+//                    }
+//                }, 1500);
+//            }
+//            SonicUtils.log(TAG, Log.ERROR, "session(" + sId + ") runSonicFlow error:network is not valid!");
+//        }
+//        else {
+//        handleFlow_Connection(hasHtmlCache, sessionData);
+//        statistics.connectionFlowFinishTime = System.currentTimeMillis();
+//        }
 
-        final SonicRuntime runtime = SonicEngine.getInstance().getRuntime();
-        if (!runtime.isNetworkValid()) {
-            //Whether the network is available
-            if (hasHtmlCache && !TextUtils.isEmpty(config.USE_SONIC_CACHE_IN_BAD_NETWORK_TOAST)) {
-                runtime.postTaskToMainThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (clientIsReady.get() && !isDestroyedOrWaitingForDestroy()) {
-                            runtime.showToast(config.USE_SONIC_CACHE_IN_BAD_NETWORK_TOAST, Toast.LENGTH_LONG);
-                        }
-                    }
-                }, 1500);
-            }
-            SonicUtils.log(TAG, Log.ERROR, "session(" + sId + ") runSonicFlow error:network is not valid!");
-        } else {
-            handleFlow_Connection(hasHtmlCache, sessionData);
-            statistics.connectionFlowFinishTime = System.currentTimeMillis();
-        }
-
-        // Update session state
-        switchState(STATE_RUNNING, STATE_READY, true);
-
+//        // Update session state
+//        switchState(STATE_RUNNING, STATE_READY, true);
+//
         isWaitingForSessionThread.set(false);
+//
+//        // Current session can be destroyed if it is waiting for destroy.
+//        if (postForceDestroyIfNeed()) {
+//            SonicUtils.log(TAG, Log.INFO, "session(" + sId + ") runSonicFlow:send force destroy message.");
+//    }
 
-        // Current session can be destroyed if it is waiting for destroy.
-        if (postForceDestroyIfNeed()) {
-            SonicUtils.log(TAG, Log.INFO, "session(" + sId + ") runSonicFlow:send force destroy message.");
-        }
     }
 
 
